@@ -18,7 +18,6 @@ public class UserService {
         User user=new User();
         user.setUsername(username);
         user.setPassword(password);
-
         user.setFirstName("test");
         user.setLastName("test");
         userRepository3.save(user);
@@ -31,9 +30,9 @@ public class UserService {
     }
 
     public User updateUser(Integer id, String password){
-        Optional<User> optionalUser=userRepository3.findById(id);
-        if(optionalUser.isPresent()) {
-            User user=optionalUser.get();
+        Optional<User> userOp = userRepository3.findById(id);
+        if(userOp.isPresent()){
+            User user = userOp.get();
             user.setPassword(password);
             userRepository3.save(user);
             return user;

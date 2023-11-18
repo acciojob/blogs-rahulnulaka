@@ -25,14 +25,16 @@ public class BlogService {
 
     public Blog createAndReturnBlog(Integer userId, String title, String content) {
         //create a blog at the current time
-        Optional<User> optionalUser=userRepository1.findById(userId);
-        if(optionalUser.isPresent()) {
-            User user=optionalUser.get();
-            Blog blog = new Blog();
-            blog.setContent(content);
-            blog.setTitle(title);
-            blog.setPubDate(new Date());
+        Blog blog = new Blog();
+        blog.setTitle(title);
+        blog.setContent(content);
+        blog.setPubDate(new Date());
+
+        Optional<User> userOp = userRepository1.findById(userId);
+        if(userOp.isPresent()){
+            User user = userOp.get();
             blog.setUser(user);
+            // save the blog
             blogRepository1.save(blog);
             userRepository1.save(user);
             return blog;
@@ -43,6 +45,5 @@ public class BlogService {
     public void deleteBlog(int blogId){
         //delete blog and corresponding images
         blogRepository1.deleteById(blogId);
-
     }
 }

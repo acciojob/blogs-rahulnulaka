@@ -18,13 +18,14 @@ public class ImageService {
 
     public Image addImage(Integer blogId, String description, String dimensions){
         //add an image to the blog
-        Optional<Blog> optionalBlog=blogRepository2.findById(blogId);
-        if(optionalBlog.isPresent()) {
-            Blog blog=optionalBlog.get();
-            Image image = new Image();
+        Image image = new Image();
+        image.setDescription(description);
+        image.setDimensions(dimensions);
+
+        Optional<Blog> blogOp = blogRepository2.findById(blogId);
+        if(blogOp.isPresent()){
+            Blog blog = blogOp.get();
             image.setBlog(blog);
-            image.setDescription(description);
-            image.setDimensions(dimensions);
             imageRepository2.save(image);
             return image;
         }
@@ -32,23 +33,29 @@ public class ImageService {
     }
 
     public void deleteImage(Integer id){
-            imageRepository2.deleteById(id);
+        imageRepository2.deleteById(id);
     }
 
     public int countImagesInScreen(Integer id, String screenDimensions) {
         //Find the number of images of given dimensions that can fit in a screen having `screenDimensions`
-        Optional<Image> optionalImage=imageRepository2.findById(id);
-        if(optionalImage.isPresent()) {
-            Image image=optionalImage.get();
-            String[] dim = image.getDimensions().split("X");
-            int inLen = Integer.parseInt(dim[0]);
-            int inWid = Integer.parseInt(dim[1]);
+        int count = -1;
+        Optional<Image> imageOp = imageRepository2.findById(id);
+        if(imageOp.isPresent()){
+            String imgDimensions = imageOp.get().getDimensions();
+            String[] arr = imgDimensions.split("X"); // 2X3
+            int inLen = Integer.parseInt(arr[0]);
+            int inWid = Integer.parseInt(arr[1]);
+//            int inArea = inLen * inWid;
 
-            String[] dim2 = screenDimensions.split("X");
-            int outLen = Integer.parseInt(dim2[0]);
-            int outWid = Integer.parseInt(dim2[1]);
-            return (outLen / inLen) * (outWid / inWid);
+            arr = screenDimensions.split("X");  // 9X12
+            int outLen = Integer.parseInt(arr[0]);
+            int outWid = Integer.parseInt(arr[1]);
+//            int outArea = outLen * outWid;
+
+            int c1 = (outLen/inLen) * (outWid/inWid);
+
+            count = c1;
         }
-        return -1;
+        return count;
     }
 }
