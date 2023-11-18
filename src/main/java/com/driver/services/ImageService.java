@@ -32,10 +32,7 @@ public class ImageService {
     }
 
     public void deleteImage(Integer id){
-        Optional<Image> optionalImage=imageRepository2.findById(id);
-        if(optionalImage.isPresent()) {
             imageRepository2.deleteById(id);
-        }
     }
 
     public int countImagesInScreen(Integer id, String screenDimensions) {
@@ -52,6 +49,6 @@ public class ImageService {
             int outWid = Integer.parseInt(dim2[1]);
             return (outLen / inLen) * (outWid / inWid);
         }
-        return 0;
+        return -1;
     }
 }

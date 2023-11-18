@@ -27,11 +27,7 @@ public class UserService {
     }
 
     public void deleteUser(int userId){
-        Optional<User> optionalUser=userRepository3.findById(userId);
-        if(optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            userRepository3.deleteById(userId);
-        }
+        userRepository3.deleteById(userId);
     }
 
     public User updateUser(Integer id, String password){
