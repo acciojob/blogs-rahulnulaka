@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlogService {
@@ -24,18 +25,24 @@ public class BlogService {
 
     public Blog createAndReturnBlog(Integer userId, String title, String content) {
         //create a blog at the current time
-        User user=userRepository1.findById(userId).get();
-        Blog blog=new Blog();
-        blog.setContent(content);
-        blog.setTitle(title);
-        blog.setPubDate(new Date());
-        blog.setUser(user);
-        blogRepository1.save(blog);
-        return blog;
+        Optional<User> optionalUser=userRepository1.findById(userId);
+        if(optionalUser.isPresent()) {
+            User user=optionalUser.get();
+            Blog blog = new Blog();
+            blog.setContent(content);
+            blog.setTitle(title);
+            blog.setPubDate(new Date());
+            blog.setUser(user);
+            blogRepository1.save(blog);
+            return blog;
+        }
+        return null;
     }
 
     public void deleteBlog(int blogId){
         //delete blog and corresponding images
-        blogRepository1.deleteById(blogId);
+        Optional<Blog> optionalBlog=blogRepository1.findById(blogId);
+        if(optionalBlog.isPresent()) blogRepository1.deleteById(blogId);
+
     }
 }
