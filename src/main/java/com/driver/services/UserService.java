@@ -26,6 +26,11 @@ public class UserService {
     }
 
     public void deleteUser(int userId){
+        Optional<User> optionalUser=userRepository3.findById(userId);
+        if(optionalUser.isPresent()){
+            User user=optionalUser.get();
+            user.getBlogList().clear();
+        }
         userRepository3.deleteById(userId);
     }
 
